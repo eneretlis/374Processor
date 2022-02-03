@@ -4,9 +4,9 @@ module and_32bit(
 	output wire [31:0] Rc
 	);
 
-	integer i;
-	for (i=0; i<32; i+1)
+	integer a;
+	for (a=0; a<32; a+1)
 		begin
-			assign Rc[i] = Ra[i]&Rb[i];
+			assign Rc[a] = Ra[a]&Rb[a];
 		end
 endmodule 
