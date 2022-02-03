@@ -11,5 +11,3 @@ module 2_to_1_MUX(
 	default: Out = 32b'x
 	endcase
 endmodule
-	
-	
