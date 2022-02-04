@@ -1,0 +1,9 @@
+module subtract32 (
+	input [31:0] Ra, Rb,
+	output [31:0] Rc
+	);
+	wire [31:0] new;
+	negate_32 negate(Rb,new);
+	addmodule add(Ra, Rb, Rc);
+	
+endmodule

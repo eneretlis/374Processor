@@ -1,6 +1,6 @@
 module not_32(
-	input [31:0] Ra
-	output [31:0] Rc
+	input [31:0] Rb
+	output [31:0] Ra
 	);
-	assign Rc = !Ra;
+	assign Ra = !Rb;
 endmodule
