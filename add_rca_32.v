@@ -1,5 +1,6 @@
-module add_rca_32 (output c_out, output [31:0] sum, input [31:0] a,b, input c_in);
-	wire c_in4, c_in8, c_in12, c_in16, c_in20, c_in24, c_in28, c_out;
+module add_rca_32 (output [31:0] sum, input [31:0] a,b);
+	wire c_in, c_in4, c_in8, c_in12, c_in16, c_in20, c_in24, c_in28, c_out;
+	assign c_in = 0;
 	add_rca_4 M1 (c_in4, sum[3:0], a[3:0], b[3:0], c_in);
 	add_rca_4 M2 (c_in8, sum[7:4], a[7:4], b[7:4], c_in4);
 	add_rca_4 M3 (c_in12, sum[11:8], a[11:8], b[11:8], c_in8);
