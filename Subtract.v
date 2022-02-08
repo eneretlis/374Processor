@@ -4,6 +4,6 @@ module subtract32 (
 	);
 	wire [31:0] new;
 	negate_32 negate(Rc,new);
-	addmodule add(Rb, Rc, Ra);
+	addmodule add_RCA_32(Ra, Rb, new);
 	
 endmodule
