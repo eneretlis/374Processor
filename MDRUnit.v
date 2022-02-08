@@ -1,0 +1,5 @@
+module MDRUnit(input [31:0] a, b, input read, clr, clk, enable, output [31:0] out);
+	wire MDMuxout;
+	2_to_1_MUX MDMux (a,b,read,MDMuxout);
+	Reg32 MDR (clr,clk,enable,MDMuxout,out);
+endmodule
