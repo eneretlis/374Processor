@@ -1,4 +1,4 @@
-module Mux_2_to_1(
+module 2_to_1_MUX(
 	input [31:0] In0,
 	input [31:0] In1,
 	input Signal,
