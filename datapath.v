@@ -1,8 +1,11 @@
 module DataPath(
 	input clk,
+	input clr,
+	//input wires for 35 to 5 encoder input R15out, R14out, 
 	input reg [31:0] In.Port,
 	output reg [31:0] Out.Port
 	);
+	reg [4:0] bus_signal;
 	
 	// define registers
 	reg32 R0(clr,clk,R0In,BusMuxOut,BusMuxInR0);
@@ -25,6 +28,7 @@ module DataPath(
 	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out)
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);
+	//Z hi and lo 
 	reg32 Z(clr, clk, ZIn, BusMuxOut, Z_Data_Out);
 	reg32 MAR(clr, clk, MarIn, BusMuxOut, MAR_Data_Out);
 	reg32 HI(clr, clk, HiIn, BusMuxOut, Hi_Data_Out);
@@ -32,10 +36,12 @@ module DataPath(
 	
 	
 	//32-to-5 encoder
+	
 	wire Rout = {R15out, R14out, R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
-	32_to_5_encoder({Cout, In.Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout}, bus_signal);
+	32_to_5_encoder(bus_signal,{Cout, In.Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
 	
 	//32-to-1 MUX
-	
+	//add signals here 
+	busMux = (bus_signal,, BusMuxOut);
 	
 	
