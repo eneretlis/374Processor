@@ -36,11 +36,11 @@ module ALU(
 								end
 			And : begin
 								and_32bit(Ra,Rb,ZLO);
-								ZHI = 32'b0
+								ZHI = 32'b0;
 								end
 			Or : begin
 								or_32bit(Ra,Rb,ZLO);
-								ZHI = 32'b0
+								ZHI = 32'b0;
 								end
 			Multiply: begin
 								multiply_booth(Ra,Rb,ZHI,ZLO);

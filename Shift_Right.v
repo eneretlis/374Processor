@@ -6,13 +6,13 @@ module shift_right (
 	output [31:0] Ra
 	);
 	reg [31:0] temp_reg;
+	integer count;
 	count = 0;
 	temp_reg = Rc;
 	while(temp_reg)
 		begin
 		if(temp_reg[0]) count = count +1;
 			temp_reg = temp _reg >> 1;
-		end
 	end
 	
 	Ra = Rb;
