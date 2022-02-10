@@ -12,39 +12,41 @@ module multiply_booth(
 	
 	//generate twos compliment of multiplicand
 	negate_32(Ra, invert_Ra);
-	
+	always@(Ra or Rb or invert_Ra)
+		begin
 	//set booth_value
-	assign booth_value[0] = {Rb[1],Rb[0],1'b0};
-	for(i =1;i<16;i = i+1)
-	begin
-		booth_value[i] = {Rb[2*i+1],Rb[2*i],Rb[2*i+1]};
-	end
-	
-	for(i = 0; i<16; i = i+1)
-	begin
-		case(booth_value[i])
-			3'b001, 3'b010 : partial_product[i] = {Ra[32-1],Ra};
-			3'b011 : partial_product[i] = {Rb,1'b0};
-			3'b100 : partial_product[i] = {invert_Ra[31:0],1'b0};
-			3'b101, 3'b110 : partial_product[i] = invert_Ra;
-			default : partial_product[i] = 0;
-		endcase
-	sum_partial_product[i] = $signed(pp[i]);
-	for(j=0;j<i;j = j+1)
-	begin
-		sum_partial_product = {sum_partial_product[i],2'b00};
+			assign booth_value[0] = {Rb[1],Rb[0],1'b0};
+			for(i =1;i<16;i = i+1)
+			begin
+				booth_value[i] = {Rb[2*i+1],Rb[2*i],Rb[2*i+1]};
+			end
+			
+			for(i = 0; i<16; i = i+1)
+			begin
+				case(booth_value[i])
+					3'b001, 3'b010 : partial_product[i] = {Ra[32-1],Ra};
+					3'b011 : partial_product[i] = {Rb,1'b0};
+					3'b100 : partial_product[i] = {invert_Ra[31:0],1'b0};
+					3'b101, 3'b110 : partial_product[i] = invert_Ra;
+					default : partial_product[i] = 0;
+				endcase
+			sum_partial_product[i] = $signed(pp[i]);
+			for(j=0;j<i;j = j+1)
+			begin
+				sum_partial_product = {sum_partial_product[i],2'b00};
+				end
+			end
+			
+			product = sum_partial_product[0];
+			for(i =1;i<16;i = i+1)
+			begin
+				product = product + sum_partial_product[i];
+			end
+			
+			
+			HI = product[63:32];
+			LO = product[31:0];
 		end
-	end
-	
-	product = sum_partial_product[0];
-	for(i =1;i<16;i = i+1)
-	begin
-		product = product + sum_partial_product[i];
-	end
-	
-	
-	HI = product[63:32];
-	LO = product[31:0];
 endmodule
 		
 	

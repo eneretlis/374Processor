@@ -8,9 +8,10 @@ module reg32(
 	
 	always @(posedge clk) 
 	begin
-		if (enable) 
+		if (enable) begin
 			Q = D;
-		else if (clr) 
+		end
+		else if (clr) begin
 			Q = 32'b0;
-	end	
+		end	
 endmodule

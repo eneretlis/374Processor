@@ -44,32 +44,27 @@ module DataPath(
 	
 	//32-to-1 MUX
 	//add signals here 
-	assign busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
+	//PROBLEMS HERE
+	//assign busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
 	
 	//initialize opcode to be sent to ALU
-	wire [5:0] opcode;
+	reg [5:0] opcode;
 	//create the ALU
 	//if and = 1 send opcode in 
-	if(AND ==1) opcode = 5'b01001; else
-	if(ADD ==1) opcode = 5'b00011; else
-	if(SUB ==1) opcode = 5'b00100; else
-	if(SHR ==1) opcode = 5'b00101; else
-	if(SHL ==1) opcode = 5'b00110; else
-	if(ROR ==1) opcode = 5'b00111; else
-	if(ROL ==1) opcode = 5'b01000; else
-	if(OR == 1) opcode = 5'b01010; else
-	if(MUL ==1) opcode = 5'b01110; else
-	if(DIV ==1) opcode = 5'b01111; else
-	if(NEG ==1) opcode = 5'b10000; else
-	
-	
-	
-	
-	
-endmodule
-	if(NOT ==1) opcode = 5'b10001; else opcode = 5'b00000;
+	if(AND ==1) assign opcode = 5'b01001; else
+	if(ADD ==1) assign opcode = 5'b00011; else
+	if(SUB ==1) assign opcode = 5'b00100; else
+	if(SHR ==1) assign opcode = 5'b00101; else
+	if(SHL ==1) assign opcode = 5'b00110; else
+	if(ROR ==1) assign opcode = 5'b00111; else
+	if(ROL ==1) assign opcode = 5'b01000; else
+	if(OR == 1) assign opcode = 5'b01010; else
+	if(MUL ==1) assign opcode = 5'b01110; else
+	if(DIV ==1) assign opcode = 5'b01111; else
+	if(NEG ==1) assign opcode = 5'b10000; else
+	if(NOT ==1) assign opcode = 5'b10001; else opcode = 5'b00000;
 	
 	//some kind of always statement here?
 	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHI, ZLO);
 	
-	
+endmodule

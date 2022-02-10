@@ -1,5 +1,5 @@
 module negate_32(
-	input [31:0] initialVal,
+	input [31:0] initialVal
 	output [31:0] newVal
 	);
 	wire [31:0] temp;

@@ -5,9 +5,11 @@ module Mux_2_to_1(
 	output [31:0] Out
 	);
 	always @ (In0, In1)
-	case(Signal)
-	0: Out = In0;
-	1: Out = In1;
-	default: Out = 32b'x;
-	endcase
+		begin
+			case(Signal)
+				0: Out = In0;
+				1: Out = In1;
+				default: Out = 32'bx;
+			endcase
+		end
 endmodule

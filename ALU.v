@@ -57,4 +57,5 @@ module ALU(
 								ZHI = 32'b0;
 								end
 		endcase
-end module
+	end
+endmodule
