@@ -14,7 +14,7 @@ module multiply_booth(
 	negate_32(Ra, invert_Ra);
 	
 	//set booth_value
-	assign booth_value[0] = {Rb[1],Rb[0],1'b0};
+	booth_value[0] ={Rb[1],Rb[0],1'b0};
 	for(i =1;i<16;i = i+1)
 	begin
 		booth_value[i] = {Rb[2*i+1],Rb[2*i],Rb[2*i+1]};

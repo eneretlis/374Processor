@@ -61,6 +61,12 @@ module DataPath(
 	if(MUL ==1) opcode = 5'b01110; else
 	if(DIV ==1) opcode = 5'b01111; else
 	if(NEG ==1) opcode = 5'b10000; else
+	
+	
+	
+	
+	
+endmodule
 	if(NOT ==1) opcode = 5'b10001; else opcode = 5'b00000;
 	
 	//some kind of always statement here?
