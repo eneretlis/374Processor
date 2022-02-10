@@ -1,4 +1,4 @@
-timescale 1ns/10ps 
+`timescale 1ns/10ps 
 
 module datapath_tb;       
     reg  PCout, Zlowout, MDRout, R2out, R4out;           // add any other signals to see in your simulation 

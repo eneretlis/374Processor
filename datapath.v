@@ -40,11 +40,11 @@ module DataPath(
 	
 	//32-to-5 encoder
 	wire Rout = {R15out, R14out, R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
-	32_to_5_encoder(bus_signal,{Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
+	encoder_32_to_5(bus_signal,{Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
 	
 	//32-to-1 MUX
 	//add signals here 
-	busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
+	assign busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
 	
 	//initialize opcode to be sent to ALU
 	wire [5:0] opcode;

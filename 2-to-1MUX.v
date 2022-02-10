@@ -8,6 +8,6 @@ module Mux_2_to_1(
 	case(Signal)
 	0: Out = In0;
 	1: Out = In1;
-	default: Out = 32b'x
+	default: Out = 32b'x;
 	endcase
 endmodule
