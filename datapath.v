@@ -1,7 +1,8 @@
 module DataPath(
 	//inputs and outputs correspond to testbench 
 	input PCout, Zlowout, MDRout, R2out, R4out,
-	input MARIn, Z
+	input MARIn, Zin, PCIn, MDRIn, IRin, Yin, IncPC, read, AND, R5In, R2In, R4in, clk,
+	input [31:0] Mdatain
 	);
 	//define bus_signal to be used as output of the 32 to 5 encoder
 	reg [4:0] bus_signal;
@@ -25,13 +26,11 @@ module DataPath(
 	reg32 R15(clr,clk,R15In,BusMuxOut,BusMuxInR15);
 	
 	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
-	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out)
+	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out);
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);
-	//not sure about this z reg
-	reg32 Z(clr, clk, ZIn, BusMuxOut, Z_Data_Out);
 	//still unsure
-	reg32 ZHI(clr, clk, ZHiIn, BusMuxOut, ZHi_Data_Out);
-	reg32 ZLO(clr, clk, ZLoIn, BusMuxOut, ZLo_Data_Out);
+	reg32 ZHI(clr, clk, ZIn, BusMuxOut, ZHi_Data_Out);
+	reg32 ZLO(clr, clk, ZIn, BusMuxOut, ZLo_Data_Out);
 	reg32 MAR(clr, clk, MarIn, BusMuxOut, MAR_Data_Out);
 	reg32 HI(clr, clk, HiIn, BusMuxOut, Hi_Data_Out);
 	reg32 LO(clr, clk, LoIn, BusMuxOut, Lo_Data_Out);
@@ -65,6 +64,6 @@ module DataPath(
 	if(NOT ==1) opcode = 5'b10001; else opcode = 5'b00000;
 	
 	//some kind of always statement here?
-	ALU the_ALU(opcode,Y, ZLO, ZHI, ZLO);
+	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHI, ZLO);
 	
 	
