@@ -1,10 +1,9 @@
 module DataPath(
-	input clk,
-	input clr,
-	//input wires for 35 to 5 encoder input R15out, R14out, 
-	input reg [31:0] In.Port,
-	output reg [31:0] Out.Port
+	//inputs and outputs correspond to testbench 
+	input PCout, Zlowout, MDRout, R2out, R4out,
+	input MARIn, Z
 	);
+	//define bus_signal to be used as output of the 32 to 5 encoder
 	reg [4:0] bus_signal;
 	
 	// define registers
@@ -28,20 +27,44 @@ module DataPath(
 	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out)
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);
-	//Z hi and lo 
+	//not sure about this z reg
 	reg32 Z(clr, clk, ZIn, BusMuxOut, Z_Data_Out);
+	//still unsure
+	reg32 ZHI(clr, clk, ZHiIn, BusMuxOut, ZHi_Data_Out);
+	reg32 ZLO(clr, clk, ZLoIn, BusMuxOut, ZLo_Data_Out);
 	reg32 MAR(clr, clk, MarIn, BusMuxOut, MAR_Data_Out);
 	reg32 HI(clr, clk, HiIn, BusMuxOut, Hi_Data_Out);
 	reg32 LO(clr, clk, LoIn, BusMuxOut, Lo_Data_Out);
 	
+	//define MDR
+	MDRUnit MDR(BusMuxOut, Mdatain, read, clr, clk, MDRIn, MDR_data_out);
 	
 	//32-to-5 encoder
-	
 	wire Rout = {R15out, R14out, R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
-	32_to_5_encoder(bus_signal,{Cout, In.Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
+	32_to_5_encoder(bus_signal,{Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
 	
 	//32-to-1 MUX
 	//add signals here 
-	busMux = (bus_signal,, BusMuxOut);
+	busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
+	
+	//initialize opcode to be sent to ALU
+	wire [5:0] opcode;
+	//create the ALU
+	//if and = 1 send opcode in 
+	if(AND ==1) opcode = 5'b01001; else
+	if(ADD ==1) opcode = 5'b00011; else
+	if(SUB ==1) opcode = 5'b00100; else
+	if(SHR ==1) opcode = 5'b00101; else
+	if(SHL ==1) opcode = 5'b00110; else
+	if(ROR ==1) opcode = 5'b00111; else
+	if(ROL ==1) opcode = 5'b01000; else
+	if(OR == 1) opcode = 5'b01010; else
+	if(MUL ==1) opcode = 5'b01110; else
+	if(DIV ==1) opcode = 5'b01111; else
+	if(NEG ==1) opcode = 5'b10000; else
+	if(NOT ==1) opcode = 5'b10001; else opcode = 5'b00000;
+	
+	//some kind of always statement here?
+	ALU the_ALU(opcode,Y, ZLO, ZHI, ZLO);
 	
 	
