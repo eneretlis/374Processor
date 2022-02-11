@@ -51,18 +51,22 @@ module DataPath(
 	reg [5:0] opcode;
 	//create the ALU
 	//if and = 1 send opcode in 
-	if(AND ==1) assign opcode = 5'b01001; else
-	if(ADD ==1) assign opcode = 5'b00011; else
-	if(SUB ==1) assign opcode = 5'b00100; else
-	if(SHR ==1) assign opcode = 5'b00101; else
-	if(SHL ==1) assign opcode = 5'b00110; else
-	if(ROR ==1) assign opcode = 5'b00111; else
-	if(ROL ==1) assign opcode = 5'b01000; else
-	if(OR == 1) assign opcode = 5'b01010; else
-	if(MUL ==1) assign opcode = 5'b01110; else
-	if(DIV ==1) assign opcode = 5'b01111; else
-	if(NEG ==1) assign opcode = 5'b10000; else
-	if(NOT ==1) assign opcode = 5'b10001; else opcode = 5'b00000;
+	always@(*)
+		begin
+			if(AND ==1) opcode = 5'b01001; 
+			else if(ADD ==1) opcode = 5'b00011; 
+			else if(SUB ==1) opcode = 5'b00100; 
+			else if(SHR ==1) opcode = 5'b00101; 
+			else if(SHL ==1) opcode = 5'b00110;
+			else if(ROR ==1) opcode = 5'b00111; 
+			else if(ROL ==1) opcode = 5'b01000; 
+			else if(OR == 1) opcode = 5'b01010; 
+			else if(MUL ==1) opcode = 5'b01110; 
+			else if(DIV ==1) opcode = 5'b01111; 
+			else if(NEG ==1) opcode = 5'b10000; 
+			else if(NOT ==1) opcode = 5'b10001; 
+			else opcode = 5'b00000;
+		end
 	
 	//some kind of always statement here?
 	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHI, ZLO);
