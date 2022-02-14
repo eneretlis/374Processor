@@ -1,7 +1,7 @@
 module rol (
 	input [31:0] Rb, 
 	input [4:0] Rc,
-	output [31:0] Ra
+	output reg [31:0] Ra
 	);
 	always@(*)
 		begin

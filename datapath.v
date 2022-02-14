@@ -1,7 +1,10 @@
 module DataPath(
 	//inputs and outputs correspond to testbench 
-	input PCout, Zlowout, MDRout, R2out, R4out,
-	input MARIn, Zin, PCIn, MDRIn, IRin, Yin, IncPC, read, AND, R5In, R2In, R4in, clk,
+	input PCout, Zlowout, MDRout, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
+	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, 
+	input read, AND, ADD, OR, SUB, SHR, SHL, ROR, ROL, MUL, DIV, NEG, NOT, 
+	input R1In, R2In, R3In, R4In, R5In, R6In, R7In, R8In, R9In, R10In, R11In, R12In, R13In, R14In, R15In, 
+	input clk,
 	input [31:0] Mdatain
 	);
 	//define bus_signal to be used as output of the 32 to 5 encoder

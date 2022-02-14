@@ -1,6 +1,6 @@
 module multiply_booth(
 	input [31:0] Ra, Rb,
-	output [31:0] HI, LO
+	output reg [31:0] HI, LO
 	);
 	//create wires and registers to be used in algorithm
 	wire [31:0] invert_Ra;
@@ -11,7 +11,7 @@ module multiply_booth(
 	integer i, j;
 	
 	//generate twos compliment of multiplicand
-	negate_32(Ra, invert_Ra);
+	NegateValue negate_32(Ra, invert_Ra);
 	always@(Ra or Rb or invert_Ra)
 		begin
 	//set booth_value
@@ -30,10 +30,10 @@ module multiply_booth(
 					3'b101, 3'b110 : partial_product[i] = invert_Ra;
 					default : partial_product[i] = 0;
 				endcase
-			sum_partial_product[i] = $signed(pp[i]);
+			sum_partial_product[i] = $signed(partial_product[i]);
 			for(j=0;j<i;j = j+1)
 			begin
-				sum_partial_product = {sum_partial_product[i],2'b00};
+				sum_partial_product[i] = {sum_partial_product[i],2'b00};
 				end
 			end
 			

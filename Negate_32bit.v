@@ -4,7 +4,7 @@ module negate_32(
 	);
 	wire [31:0] temp;
 	not_32 notVal(initialVal,temp);
-	//adddmodule
-	addMod add(newVal, 32'b01, temp);
+	//adddmodule'
+	assign newVal = 32'b01 + temp;
 	
 endmodule
