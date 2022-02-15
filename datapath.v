@@ -2,9 +2,10 @@ module DataPath(
 	//inputs and outputs correspond to testbench 
 	input PCout, Zlowout, MDRout, R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
 	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, 
-	input read, AND, ADD, OR, SUB, SHR, SHL, ROR, ROL, MUL, DIV, NEG, NOT, 
+	input read,
 	input R1In, R2In, R3In, R4In, R5In, R6In, R7In, R8In, R9In, R10In, R11In, R12In, R13In, R14In, R15In, 
 	input clk,
+	input [4:0] opcode,
 	input [31:0] Mdatain
 	);
 	//define bus_signal to be used as output of the 32 to 5 encoder
@@ -51,25 +52,25 @@ module DataPath(
 	//assign busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
 	
 	//initialize opcode to be sent to ALU
-	reg [5:0] opcode;
+	//reg [5:0] opcode;
 	//create the ALU
 	//if and = 1 send opcode in 
-	always@(*)
-		begin
-			if(AND ==1) opcode = 5'b01001; 
-			else if(ADD ==1) opcode = 5'b00011; 
-			else if(SUB ==1) opcode = 5'b00100; 
-			else if(SHR ==1) opcode = 5'b00101; 
-			else if(SHL ==1) opcode = 5'b00110;
-			else if(ROR ==1) opcode = 5'b00111; 
-			else if(ROL ==1) opcode = 5'b01000; 
-			else if(OR == 1) opcode = 5'b01010; 
-			else if(MUL ==1) opcode = 5'b01110; 
-			else if(DIV ==1) opcode = 5'b01111; 
-			else if(NEG ==1) opcode = 5'b10000; 
-			else if(NOT ==1) opcode = 5'b10001; 
-			else opcode = 5'b00000;
-		end
+	//always@(*)
+		//begin
+			//if(AND ==1) opcode = 5'b01001; 
+			//else if(ADD ==1) opcode = 5'b00011; 
+			//else if(SUB ==1) opcode = 5'b00100; 
+			//else if(SHR ==1) opcode = 5'b00101; 
+			//else if(SHL ==1) opcode = 5'b00110;
+			//else if(ROR ==1) opcode = 5'b00111; 
+			//else if(ROL ==1) opcode = 5'b01000; 
+			//else if(OR == 1) opcode = 5'b01010; 
+			//else if(MUL ==1) opcode = 5'b01110; 
+			//else if(DIV ==1) opcode = 5'b01111; 
+			//else if(NEG ==1) opcode = 5'b10000; 
+			//else if(NOT ==1) opcode = 5'b10001; 
+			//else opcode = 5'b00000;
+		//end
 	
 	//some kind of always statement here?
 	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHI, ZLO);
