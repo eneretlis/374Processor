@@ -1,4 +1,4 @@
-module encoder_35_to_5(
+module encoder_32_to_5(
 	output reg [4:0] Code,
 	input [31:0] Data
 	);

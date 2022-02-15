@@ -1,16 +1,21 @@
-module DataPath(
+module datapath(
 	//inputs and outputs correspond to testbench 
-	input PCout, Zlowout, MDRout, R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
-	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, 
+	input PCout, Zlowout, Zhighout, MDRout, R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
+	input Cout, In_Portout, LOout, HIout, 
+	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,
 	input read,
-	input R1In, R2In, R3In, R4In, R5In, R6In, R7In, R8In, R9In, R10In, R11In, R12In, R13In, R14In, R15In, 
+	input R0In, R1In, R2In, R3In, R4In, R5In, R6In, R7In, R8In, R9In, R10In, R11In, R12In, R13In, R14In, R15In, 
 	input clk,
 	input [4:0] opcode,
 	input [31:0] Mdatain
 	);
 	//define bus_signal to be used as output of the 32 to 5 encoder
+	wire [31:0] BusMuxOut;
 	reg [4:0] bus_signal;
-	
+	wire clr;
+	wire [31:0] BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9,
+		 BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, PC_Data_Out, IR_Data_Out, 
+		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, MAR_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue;
 	// define registers
 	reg32 R0(clr,clk,R0In,BusMuxOut,BusMuxInR0);
 	reg32 R1(clr,clk,R1In,BusMuxOut,BusMuxInR1);
@@ -35,21 +40,23 @@ module DataPath(
 	//still unsure
 	reg32 ZHI(clr, clk, ZIn, BusMuxOut, ZHi_Data_Out);
 	reg32 ZLO(clr, clk, ZIn, BusMuxOut, ZLo_Data_Out);
-	reg32 MAR(clr, clk, MarIn, BusMuxOut, MAR_Data_Out);
+	reg32 MAR(clr, clk, MARIn, BusMuxOut, MAR_Data_Out);
 	reg32 HI(clr, clk, HiIn, BusMuxOut, Hi_Data_Out);
 	reg32 LO(clr, clk, LoIn, BusMuxOut, Lo_Data_Out);
+	reg32 C(clr, clk, CIn, BusMuxOut, CValue);
+
 	
 	//define MDR
 	MDRUnit MDR(BusMuxOut, Mdatain, read, clr, clk, MDRIn, MDR_data_out);
 	
 	//32-to-5 encoder
 	wire Rout = {R15out, R14out, R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
-	encoder_32_to_5(bus_signal,{Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
+	encoder_32_to_5 Encoder1(bus_signal,{Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Rout});
 	
 	//32-to-1 MUX
 	//add signals here 
 	//PROBLEMS HERE
-	//assign busMux = (bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
+	bus_Mux Bus_inst(bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, In_Portout, CValue, BusMuxOut);
 	
 	//initialize opcode to be sent to ALU
 	//reg [5:0] opcode;
@@ -73,6 +80,7 @@ module DataPath(
 		//end
 	
 	//some kind of always statement here?
-	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHI, ZLO);
+
+	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHi_Data_Out, ZLo_Data_Out);
 	
 endmodule

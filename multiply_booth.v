@@ -11,11 +11,11 @@ module multiply_booth(
 	integer i, j;
 	
 	//generate twos compliment of multiplicand
-	NegateValue negate_32(Ra, invert_Ra);
+	assign invert_Ra = ~Ra;
 	always@(Ra or Rb or invert_Ra)
 		begin
 	//set booth_value
-			assign booth_value[0] = {Rb[1],Rb[0],1'b0};
+			booth_value[0] = {Rb[1],Rb[0],1'b0};
 			for(i =1;i<16;i = i+1)
 			begin
 				booth_value[i] = {Rb[2*i+1],Rb[2*i],Rb[2*i+1]};
