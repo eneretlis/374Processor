@@ -1,8 +1,9 @@
 module ror (
-	input [31:0] Rb,
-	input [4:0] Rc,
+	input [31:0] Rb,Rc,
 	output reg [31:0] Ra
 	);
+	wire [4:0] num;
+	assign num = Rc % 32;
 	always@(*)
 		begin
 			case(Rc)

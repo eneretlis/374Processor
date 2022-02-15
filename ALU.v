@@ -10,6 +10,7 @@ module ALU(
 		
 	wire [31:0] resultRor, resultRol, resultAdd, multLO;
 	wire[63:32] multHI;
+	
 	ror rightRotate(Ra,Rb,resultRor);
 	rol leftRotate(Ra,Rb,resultRol);
 	add_rca_32 Adding(resultAdd, Ra, Rb);

@@ -1,11 +1,12 @@
 module rol (
-	input [31:0] Rb, 
-	input [4:0] Rc,
+	input [31:0] Rb, Rc,
 	output reg [31:0] Ra
 	);
+	wire [4:0] num;
+	assign num = Rc % 32;
 	always@(*)
 		begin
-			case(Rc)
+			case(num)
 				1 : Ra <= {Rb[30:0], Rb[31]};
 				2 : Ra <= {Rb[29:0], Rb[31:30]};
 				3 : Ra <= {Rb[28:0], Rb[31:29]};
@@ -38,6 +39,6 @@ module rol (
 				30 : Ra <= {Rb[1:0],Rb[31:2]};
 				31 : Ra <= {Rb[0],Rb[31:1]};
 				default: Ra<= Rb;
-				endcase
+			endcase
 		end
 endmodule
