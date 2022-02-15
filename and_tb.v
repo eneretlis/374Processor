@@ -11,7 +11,7 @@ module datapath_tb;
 				T4 = 4'b1011, T5 = 4'b1100;
 	reg [3:0] Present_state = Default;
 	
-	Datapath1 DataPath(PCout, Zlowout, MDRout, R2out, R4out, MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, read, AND, R5In, R4In, clk, Mdatain);
+	DataPath DUT(PCout, Zlowout, MDRout, R2out, R4out, MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, read, AND, R5In, R4In, clk, Mdatain);
 	
 	initial
 		begin
@@ -80,10 +80,10 @@ module datapath_tb;
 					Mdatain <= 32'h4A920000;
 				end
 				T2: begin
-					MDRout <=1; IRin<=1;
+					MDRout <=1; IRIn<=1;
 				end
 				T3: begin
-					R2out <=1; Yin <=1;
+					R2out <=1; YIn <=1;
 				end
 				T4: begin
 					R4out <=1; AND <=1; ZIn<=1;

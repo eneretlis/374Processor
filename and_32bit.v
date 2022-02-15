@@ -5,6 +5,6 @@ module and_32bit(
 	);
 
 	
-	assign Ra = Rb&&Rc;
+	 assign Ra = Rb&&Rc;
 
 endmodule 
