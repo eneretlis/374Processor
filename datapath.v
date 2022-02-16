@@ -51,13 +51,16 @@ module datapath(
 	MDRUnit MDR(BusMuxOut, Mdatain, read, clr, clk, MDRIn, MDR_data_out);
 	
 	//32-to-5 encoder
-	wire [31:0] Data = {Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, R15out, R14out, R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
+	wire [31:0] Data = {Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, R15out, R14out, 
+			    R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
 	encoder_32_to_5 Encoder1(bus_signal,Data);
 	
 	//32-to-1 MUX
 	//add signals here 
 	//PROBLEMS HERE
-	bus_Mux Bus_inst(bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, CValue, BusMuxOut);
+	bus_Mux Bus_inst(bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6,
+			 BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, 
+			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, CValue, BusMuxOut);
 	
 	//initialize opcode to be sent to ALU
 	//reg [5:0] opcode;
