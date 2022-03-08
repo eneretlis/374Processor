@@ -1,0 +1,9 @@
+module SelectandEncode(input [31:0] instruction,
+								input Gra,Grb,Grc,Rin,Rout,BAout,
+								output [15:0] Rout, RIn,
+								output [31:0] C_sign_extended);
+	wire [3:0] decoder_input;
+	//maybe 4*Gr
+	assign decoder_input = ((instruction[26:23] & Gra) | (instruction[22:19] & Grb) | (instruction[18:15] & Grc));
+	
+	
