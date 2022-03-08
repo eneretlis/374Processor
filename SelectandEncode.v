@@ -12,6 +12,8 @@ module SelectandEncode(input [31:0] instruction,
 		
 		RegIn = decoder_output & {16{Rin}};
 		Regout = ({16{BAout}} | {16{Rout}}) & decoder_output;
+		
+		C_sign_extended = {{13{instruction[18]}},instruction[18:0]};
 	end
 endmodule
 	

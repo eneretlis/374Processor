@@ -1,10 +1,9 @@
 module datapath(
 	//inputs and outputs correspond to testbench 
-	input PCout, Zlowout, Zhighout, MDRout, R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out,
+	input PCout, Zlowout, Zhighout, MDRout,
 	input Cout, In_Portout, LOout, HIout, 
 	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,
 	input read,
-	input R0In, R1In, R2In, R3In, R4In, R5In, R6In, R7In, R8In, R9In, R10In, R11In, R12In, R13In, R14In, R15In, 
 	input clk,
 	input [4:0] opcode,
 	input [31:0] Mdatain
@@ -21,10 +20,11 @@ module datapath(
 	wire read, write;
 	// define registers
 	
-	reg32 R0(clr,clk,R0In,BusMuxOut,BusMuxInR0);
-	reg32 R1(clr,clk,R1In,BusMuxOut,BusMuxInR1);
-	reg32 R2(clr,clk,R2In,BusMuxOut,BusMuxInR2);
-	reg32 R3(clr,clk,R3In,BusMuxOut,BusMuxInR3);
+	reg32 R0(clr,clk,R0In,BusMuxOut,out_to_and);
+	assign BusMuxInR0 = {16{!BAout}} & out_to_and;
+	reg32 R1(clr,clk,RegIn[1],BusMuxOut,BusMuxInR1);
+	reg32 R2(clr,clk,RegIn[2],BusMuxOut,BusMuxInR2);
+	reg32 R3(clr,clk,RegIn[3],BusMuxOut,BusMuxInR3);
 	reg32 R4(clr,clk,R4In,BusMuxOut,BusMuxInR4);
 	reg32 R5(clr,clk,R5In,BusMuxOut,BusMuxInR5);
 	reg32 R6(clr,clk,R6In,BusMuxOut,BusMuxInR6);
@@ -39,6 +39,7 @@ module datapath(
 	reg32 R15(clr,clk,R15In,BusMuxOut,BusMuxInR15);
 	
 	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
+	//Maybe this Should be defined somehwere
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out);
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);
 	//still unsure
@@ -70,5 +71,7 @@ module datapath(
 	MAR the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
 	RAM the_RAM(clk, write, read, MDR_data_out, Address, Mdatain);
+	//select and Encoder
+	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn, C_sign_exteneded);
 	
 endmodule
