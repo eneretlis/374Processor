@@ -1,6 +1,7 @@
 module SelectandEncode(input [31:0] instruction,
 								input Gra,Grb,Grc,Rin,Rout,BAout,
 								output [15:0] Regout, RegIn,
+								output [4:0] opcode,
 								output [31:0] C_sign_extended);
 	wire [3:0] decoder_input;
 	wire [15:0] decoder_output;
@@ -14,6 +15,7 @@ module SelectandEncode(input [31:0] instruction,
 		Regout = ({16{BAout}} | {16{Rout}}) & decoder_output;
 		
 		C_sign_extended = {{13{instruction[18]}},instruction[18:0]};
+		opcode = instruction[31:27];
 	end
 endmodule
 	

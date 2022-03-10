@@ -1,43 +1,54 @@
 module datapath(
 	//inputs and outputs correspond to testbench 
+	input clk, clr,
+	//MDR
+	input read, write
+	input [31:0] Mdatain,
+	//select for other registers
 	input PCout, Zlowout, Zhighout, MDRout,
 	input Cout, In_Portout, LOout, HIout, 
-	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,
-	input read,
-	input clk,
-	input [4:0] opcode,
-	input [31:0] Mdatain
+	//enable for others
+	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn,
+	//for select and encode logic
+	input Gra, Grb, Grc, Rin, Rout, BAout
 	);
-	//define bus_signal to be used as output of the 32 to 5 encoder
+	//Bus contents
 	wire [31:0] BusMuxOut;
+	//encoder signal
 	wire [4:0] bus_signal;
-	wire clr;
+	//define wires for the busMux, is the output of the data registers
 	wire [31:0] BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9,
 		 BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, PC_Data_Out, IR_Data_Out, 
-		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue;
-	wire [8:0] Address;
-	//MAYBE INPUT AS TESTBENCH 
-	wire read, write;
-	// define registers
+		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue, Out_data_out, In_data_out;
+	//select and encode 
+	wire [4:0] opcode;
+	//select and enable for general purpose registers
+	wire [15:0] RegIn, RegOut;
+	//MAR address 
+	wire [8:0] Address;	
+	//CONff
+	wire CONout;
 	
+	// define registers
+	//16 general purpose registers
 	reg32 R0(clr,clk,R0In,BusMuxOut,out_to_and);
 	assign BusMuxInR0 = {16{!BAout}} & out_to_and;
 	reg32 R1(clr,clk,RegIn[1],BusMuxOut,BusMuxInR1);
 	reg32 R2(clr,clk,RegIn[2],BusMuxOut,BusMuxInR2);
 	reg32 R3(clr,clk,RegIn[3],BusMuxOut,BusMuxInR3);
-	reg32 R4(clr,clk,R4In,BusMuxOut,BusMuxInR4);
-	reg32 R5(clr,clk,R5In,BusMuxOut,BusMuxInR5);
-	reg32 R6(clr,clk,R6In,BusMuxOut,BusMuxInR6);
-	reg32 R7(clr,clk,R7In,BusMuxOut,BusMuxInR7);
-	reg32 R8(clr,clk,R8In,BusMuxOut,BusMuxInR8);
-	reg32 R9(clr,clk,R9In,BusMuxOut,BusMuxInR9);
-	reg32 R10(clr,clk,R10In,BusMuxOut,BusMuxInR10);
-	reg32 R11(clr,clk,R11In,BusMuxOut,BusMuxInR11);
-	reg32 R12(clr,clk,R12In,BusMuxOut,BusMuxInR12);
-	reg32 R13(clr,clk,R13In,BusMuxOut,BusMuxInR13);
-	reg32 R14(clr,clk,R14In,BusMuxOut,BusMuxInR14);
-	reg32 R15(clr,clk,R15In,BusMuxOut,BusMuxInR15);
-	
+	reg32 R4(clr,clk,RegIn[4],BusMuxOut,BusMuxInR4);
+	reg32 R5(clr,clk,RegIn[5],BusMuxOut,BusMuxInR5);
+	reg32 R6(clr,clk,RegIn[6],BusMuxOut,BusMuxInR6);
+	reg32 R7(clr,clk,RegIn[7],BusMuxOut,BusMuxInR7);
+	reg32 R8(clr,clk,RegIn[8],BusMuxOut,BusMuxInR8);
+	reg32 R9(clr,clk,RegIn[9],BusMuxOut,BusMuxInR9);
+	reg32 R10(clr,clk,RegIn[10],BusMuxOut,BusMuxInR10);
+	reg32 R11(clr,clk,RegIn[11],BusMuxOut,BusMuxInR11);
+	reg32 R12(clr,clk,RegIn[12],BusMuxOut,BusMuxInR12);
+	reg32 R13(clr,clk,RegIn[13],BusMuxOut,BusMuxInR13);
+	reg32 R14(clr,clk,RegIn[14],BusMuxOut,BusMuxInR14);
+	reg32 R15(clr,clk,RegIn[15],BusMuxOut,BusMuxInR15);
+	//special registers
 	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
 	//Maybe this Should be defined somehwere
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out);
@@ -58,7 +69,6 @@ module datapath(
 	encoder_32_to_5 Encoder1(bus_signal,Data);
 	
 	//32-to-1 MUX
-	//add signals here 
 	//PROBLEMS HERE
 	bus_Mux Bus_inst(bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6,
 			 BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, 
@@ -66,12 +76,16 @@ module datapath(
 	
 	//call ALU
 	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHi_Data_Out, ZLo_Data_Out);
-	
 	//MAR 
 	MAR the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
 	RAM the_RAM(clk, write, read, MDR_data_out, Address, Mdatain);
 	//select and Encoder
-	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn, C_sign_exteneded);
+	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn,opcode, C_sign_exteneded);
+	//conff
+	CON_FF the_conff(BusMuxOut,IR_Data_Out[20:19], CONout);
+	//input and output ports
+	reg32 outputPort(clr,clk,OutIn,BusMuxOut, Out_data_out);
+	reg32 inputPort(clr,clk,InIn,BusMuxOut, In_data_out);
 	
 endmodule
