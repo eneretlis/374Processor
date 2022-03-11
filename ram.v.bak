@@ -9,7 +9,6 @@ module RAM (input clk, w, r,
 		if(w)
 		ram[addr] <= data_in;
 	end
-	
 	assign data_out = r?ram[addr]:32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
-endmodule
+end module
 	

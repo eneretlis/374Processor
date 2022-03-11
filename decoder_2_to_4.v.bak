@@ -1,6 +1,6 @@
 module decoder_2_to_4(
 	input [1:0] Code,
-	output reg [4:0] Data
+	output [4:0] Data
 	);
 	always @(Code)
 	begin

@@ -2,7 +2,7 @@ module datapath(
 	//inputs and outputs correspond to testbench 
 	input clk, clr,
 	//MDR
-	input read, write
+	input read, write,
 	input [31:0] Mdatain,
 	//select for other registers
 	input PCout, Zlowout, Zhighout, MDRout,
@@ -22,16 +22,18 @@ module datapath(
 		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue, Out_data_out, In_data_out;
 	//select and encode 
 	wire [4:0] opcode;
+	wire [31:0] C_sign_exteneded;
 	//select and enable for general purpose registers
-	wire [15:0] RegIn, RegOut;
+	wire [15:0] RegIn, Regout;
 	//MAR address 
 	wire [8:0] Address;	
 	//CONff
 	wire CONout;
-	
+	//new r0
+	wire [31:0] out_to_and;
 	// define registers
 	//16 general purpose registers
-	reg32 R0(clr,clk,R0In,BusMuxOut,out_to_and);
+	reg32 R0(clr,clk,RegIn[0],BusMuxOut,out_to_and);
 	assign BusMuxInR0 = {16{!BAout}} & out_to_and;
 	reg32 R1(clr,clk,RegIn[1],BusMuxOut,BusMuxInR1);
 	reg32 R2(clr,clk,RegIn[2],BusMuxOut,BusMuxInR2);
@@ -64,8 +66,9 @@ module datapath(
 	MDRUnit MDR(BusMuxOut, Mdatain, read, clr, clk, MDRIn, MDR_data_out);
 	
 	//32-to-5 encoder
-	wire [31:0] Data = {Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, R15out, R14out, 
-			    R13out, R12out, R11out, R10out, R9out, R8out, R7out, R6out, R5out, R4out, R3out, R2out, R1out, R0out};
+	wire [31:0] Data = {Cout, In_Portout, MDRout, PCout, Zlowout, Zhighout, LOout, HIout, Regout[15], Regout[14], 
+			    Regout[13], Regout[12], Regout[11], Regout[10], Regout[9], Regout[8], Regout[7], Regout[6], Regout[5], Regout[4],
+				 Regout[3], Regout[2], Regout[1], Regout[0]};
 	encoder_32_to_5 Encoder1(bus_signal,Data);
 	
 	//32-to-1 MUX
