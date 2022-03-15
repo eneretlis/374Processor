@@ -8,10 +8,11 @@ module datapath(
 	input PCout, Zlowout, Zhighout, MDRout,
 	input Cout, In_Portout, LOout, HIout, 
 	//enable for others
-	input MARIn, ZIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn,
+	input MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn, 
 	//for select and encode logic
-	input Gra, Grb, Grc, Rin, Rout, BAout
-	);
+	input Gra, Grb, Grc, Rin, Rout, BAout, 
+	//slect and encode for general purpose registeters
+	input [15:0] RegIn, Regout);
 	//Bus contents
 	wire [31:0] BusMuxOut;
 	//encoder signal
@@ -23,8 +24,6 @@ module datapath(
 	//select and encode 
 	wire [4:0] opcode;
 	wire [31:0] C_sign_exteneded;
-	//select and enable for general purpose registers
-	wire [15:0] RegIn, Regout;
 	//MAR address 
 	wire [8:0] Address;	
 	//CONff
@@ -86,7 +85,7 @@ module datapath(
 	//select and Encoder
 	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn,opcode, C_sign_exteneded);
 	//conff
-	CON_FF the_conff(BusMuxOut,IR_Data_Out[20:19], CONout);
+	CON_FF the_conff(CONIn, BusMuxOut,IR_Data_Out[20:19], CONout);
 	//input and output ports
 	reg32 outputPort(clr,clk,OutIn,BusMuxOut, Out_data_out);
 	reg32 inputPort(clr,clk,InIn,BusMuxOut, In_data_out);
