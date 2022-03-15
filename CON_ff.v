@@ -15,6 +15,6 @@ module CON_FF(input CONin,
 	
 	assign flipFlopIn = (equal | notequal | greaterThan | lessThan);
 	
-	c_flipflip cff(flipFlopIn, CONin, CONout);
+	c_flipflop cff(flipFlopIn, CONin, CONout);
 endmodule
 	

@@ -79,7 +79,7 @@ module datapath(
 	//call ALU
 	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHi_Data_Out, ZLo_Data_Out);
 	//MAR 
-	MAR the_MAR(clk, clr, MARIn, BusMuxOut, Address);
+	MARUnit the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
 	RAM the_RAM(clk, write, read, MDR_data_out, Address, Mdatain);
 	//select and Encoder

@@ -13,14 +13,14 @@ module ld_tb;
 				T4 = 4'b1011, T5 = 4'b1100, T6 = 4'b1101, T7 = 4'b1110;
 	reg [3:0] Present_state = Default;
 	
-	Datapath datapath(clk, clr, read, write, Mdatain, PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout,
-							LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, Gra, Grb, Grc,
+	datapath the_datapath(clk, clr, read, write, Mdatain, PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout,
+							LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc,
 							RIn, Rout, BAout, RegIn, Regout);
 	initial
 		begin
 			clk = 0;
 			clr = 0;
-			forever#10 clk=~clk;
+			forever #10 clk=~clk;
 	end
 	
 	always@(posedge clk)
