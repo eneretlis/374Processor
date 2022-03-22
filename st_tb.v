@@ -12,14 +12,10 @@ module st_tb;
 	reg [3:0] Present_state = Default;
 	
 	datapath the_datapath(clk, clr, read, write, PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout,
-<<<<<<< HEAD
-							LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc,
-							RIn, Rout, BAout, add, subtract, multiply, divide, andSignal, orSignal);
-=======
-				LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, 
-			      OutIn, ZIn, CONIn, Gra, Grb, Grc, RIn, Rout, BAout, add, subtract, 
-			      multiply, divide);
->>>>>>> 28f325d470417047eeffbd9c53529ade81a6399d
+			LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, 
+			ZIn, CONIn, Gra, Grb, Grc, RIn, Rout, BAout, add, subtract, multiply, divide, 
+			      andSignal, orSignal);
+
 	initial
 		begin
 			clk = 0;
