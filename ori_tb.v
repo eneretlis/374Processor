@@ -4,7 +4,7 @@ module ori_tb;
 	reg PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout;
 	reg LOout, HIout, MARIn,PCIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc;
 	reg MDRIn;
-	reg RIn, Rout, BAout, add,subtract,multiply,divide;
+	reg RIn, Rout, BAout, add,subtract,multiply,divide, andSignal, orSignal;
 	
 	
 	parameter Default = 4'b0000, T0 = 4'b0111, T1 = 4'b1000, T2 = 4'b1001, T3 = 4'b1010,
@@ -13,7 +13,7 @@ module ori_tb;
 	
 	datapath the_datapath(clk, clr, read, write, PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout,
 							LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc,
-							RIn, Rout, BAout, add, subtract, multiply, divide);
+							RIn, Rout, BAout, add, subtract, multiply, divide, andSignal, orSignal);
 	initial
 		begin
 			clk = 0;
@@ -45,7 +45,7 @@ module ori_tb;
 					Gra <=0; Grb<=0; Grc<=0;
 					BAout <= 0; Cout <= 0; IN_Portout <=0; Zhighout <= 0; LOout<=0;
 					HIout <= 0; HiIn <= 0; LoIn <=0; Rout <= 0; RIn<=0;
-					add <= 0; subtract <=0; divide<=0; multiply <=0;
+					add <= 0; subtract <=0; divide<=0; multiply <=0; andSignal<=0; orSignal<=0;
 				end
 				T0: begin
 					clr<=0;

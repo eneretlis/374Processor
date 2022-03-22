@@ -10,7 +10,7 @@ module datapath(
 	input MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn, 
 	//for select and encode logic
 	input Gra, Grb, Grc, Rin, Rout, BAout,
-	input add,subtract,multiply,divide);
+	input add,subtract,multiply,divide, andSignal, orSignal);
 	//slect and encode for general purpose registeters
 	wire [15:0] RegIn, Regout;
 	//Bus contents
@@ -80,7 +80,7 @@ module datapath(
 			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, C_sign_exteneded, BusMuxOut);
 	
 	//call ALU
-	ALU the_ALU(add,subtract,multiply,divide,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
+	ALU the_ALU(add,subtract,multiply,divide,andSignal,orSignal,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
 	//MAR 
 	MARUnit the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
@@ -88,7 +88,7 @@ module datapath(
 	ramWizard the_ramWaizard(Address, clk, MDR_data_out, write, Mdatain);
 	
 	//select and Encoder
-	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn,opcode, C_sign_exteneded);
+	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn, opcode, C_sign_exteneded);
 	//conff
 	CON_FF the_conff(CONIn, BusMuxOut,IR_Data_Out[20:19], CONout);
 	//input and output ports

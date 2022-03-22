@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module ld_tb;
+module br_tb;
 	reg clk, clr, read, write;
 	reg PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout;
 	reg LOout, HIout, MARIn,PCIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc;
@@ -87,20 +87,3 @@ module ld_tb;
 			endcase
 		end
 endmodule
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-	
-	
-	
-
-	
-	
-	

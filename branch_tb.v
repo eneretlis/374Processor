@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module ld_tb;
+module br_tb;
 	reg clk, clr, read, write;
 	reg PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout;
 	reg LOout, HIout, MARIn,PCIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc;
@@ -64,17 +64,16 @@ module ld_tb;
 					#30 MDRout <=0; IRIn <=0;
 				end
 				T3 : begin
-					Grb <=1; BAout <=1; YIn<=1;
-					#30 Grb <=0; BAout <=0; YIn<=0;
+					Gra <=1; Rout <=1; CONIn<=1;
+					#30 Gra <=0; Rout <=0; CONIn<=0;
 				end
 				T4 : begin
-					add <=1;
-					Cout <=1; ZIn <=1;
-					#30 Cout <=0; ZIn <=0; 
+					PCout <=1; YIn <=1;
+					#30 PCout <=0; YIn <=0; 
 				end
 				T5 : begin
-					Zlowout <=1; MARIn <=1;
-					#30 Zlowout <= 0; MARIn <=0;
+					Cout <=1; ZIn <=1; add<=1;
+					#30 ZIn <= 0; Cout <=0;
 				end
 				T6: begin
 				//need instruction
@@ -87,20 +86,3 @@ module ld_tb;
 			endcase
 		end
 endmodule
-				
-				
-				
-				
-				
-				
-				
-				
-				
-				
-	
-	
-	
-
-	
-	
-	
