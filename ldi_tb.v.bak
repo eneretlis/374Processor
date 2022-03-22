@@ -74,6 +74,7 @@ module ldi_tb;
 				end
 				T5 : begin
 					Zlowout <=1; Gra<=1; RIn <=1;
+					#30 Zlowout <= 0; Gra<=1; RIn <=0;
 				end
 			endcase
 		end

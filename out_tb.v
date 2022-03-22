@@ -65,7 +65,6 @@ module out_tb;
 				end
 				T3 : begin
 					Gra <=1; Rout <=1; OutIn<=1;
-					#30 Gra <=0; Rout <=0; OutIn<=0;
 				end
 			endcase
 		end
