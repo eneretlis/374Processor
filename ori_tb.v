@@ -12,8 +12,9 @@ module ori_tb;
 	reg [3:0] Present_state = Default;
 	
 	datapath the_datapath(clk, clr, read, write, PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout,
-							LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc,
-							RIn, Rout, BAout, add, subtract, multiply, divide, andSignal, orSignal);
+			LOout, HIout, MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, 
+			ZIn, CONIn, Gra, Grb, Grc, RIn, Rout, BAout, add, subtract, multiply, divide, 
+			      andSignal, orSignal);
 	initial
 		begin
 			clk = 0;
