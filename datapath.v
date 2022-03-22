@@ -3,16 +3,16 @@ module datapath(
 	input clk, clr,
 	//MDR
 	input read, write,
-	input [31:0] Mdatain,
 	//select for other registers
 	input PCout, Zlowout, Zhighout, MDRout,
 	input Cout, In_Portout, LOout, HIout, 
 	//enable for others
 	input MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn, 
 	//for select and encode logic
-	input Gra, Grb, Grc, Rin, Rout, BAout, 
+	input Gra, Grb, Grc, Rin, Rout, BAout,
+	input add,subtract,multiply,divide);
 	//slect and encode for general purpose registeters
-	input [15:0] RegIn, Regout);
+	wire [15:0] RegIn, Regout;
 	//Bus contents
 	wire [31:0] BusMuxOut;
 	//encoder signal
@@ -21,9 +21,12 @@ module datapath(
 	wire [31:0] BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9,
 		 BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, PC_Data_Out, IR_Data_Out, 
 		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue, Out_data_out, In_data_out;
+	//Z data in
+	wire [31:0] ZHiDataIn, ZLoDataIn;
 	//select and encode 
 	wire [4:0] opcode;
 	wire [31:0] C_sign_exteneded;
+	wire [31:0] Mdatain;
 	//MAR address 
 	wire [8:0] Address;	
 	//CONff
@@ -55,11 +58,11 @@ module datapath(
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out);
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);
 	//still unsure
-	reg32 ZHI(clr, clk, ZIn, BusMuxOut, ZHi_Data_Out);
-	reg32 ZLO(clr, clk, ZIn, BusMuxOut, ZLo_Data_Out);
+	reg32 ZHI(clr, clk, ZIn, ZHiDataIn, ZHi_Data_Out);
+	reg32 ZLO(clr, clk, ZIn, ZLoDataIn, ZLo_Data_Out);
 	reg32 HI(clr, clk, HiIn, BusMuxOut, Hi_Data_Out);
 	reg32 LO(clr, clk, LoIn, BusMuxOut, Lo_Data_Out);
-	reg32 C(clr, clk, CIn, BusMuxOut, CValue);
+	//reg32 C(clr, clk, CIn, BusMuxOut, CValue);
 
 	//define MDR
 	MDRUnit MDR(BusMuxOut, Mdatain, read, clr, clk, MDRIn, MDR_data_out);
@@ -74,14 +77,16 @@ module datapath(
 	//PROBLEMS HERE
 	bus_Mux Bus_inst(bus_signal,BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6,
 			 BusMuxInR7, BusMuxInR8, BusMuxInR9, BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, 
-			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, CValue, BusMuxOut);
+			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, C_sign_exteneded, BusMuxOut);
 	
 	//call ALU
-	ALU the_ALU(opcode,Y_Data_Out, BusMuxOut, ZHi_Data_Out, ZLo_Data_Out);
+	ALU the_ALU(add,subtract,multiply,divide,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
 	//MAR 
 	MARUnit the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
-	RAM the_RAM(clk, write, read, MDR_data_out, Address, Mdatain);
+	//RAM the_RAM(clk, write, read, MDR_data_out, Address, Mdatain);
+	ramWizard the_ramWaizard(Address, clk, MDR_data_out, write, Mdatain);
+	
 	//select and Encoder
 	SelectandEncode sel(IR_Data_Out, Gra,Grb,Grc,Rin,Rout,BAout,Regout, RegIn,opcode, C_sign_exteneded);
 	//conff

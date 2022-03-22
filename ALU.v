@@ -1,12 +1,12 @@
 module ALU(
-	input [4:0] opcode,
+	input add, subtract, multiply, divide,
 	input [31:0] Ra, Rb,
 	output reg [31:0] ZHI, ZLO
 	);
 	
-	parameter Addition = 5'b00011, Subtraction = 5'b00100, ShiftRight = 5'b00101, ShiftLeft = 5'b00110,
-		RotateRight = 5'b00111, RotateLeft = 5'b01000, And = 5'b01001, Or = 5'b01010, Multiply = 5'b01110, 
-		Divide = 5'b01111, Negate = 5'b10000, Not = 5'b10001;
+	parameter Addition = 5'b01000, Subtraction = 5'b00100, ShiftRight = 5'b00101, ShiftLeft = 5'b00110,
+		RotateRight = 5'b00111, RotateLeft = 5'b01000, And = 5'b01001, Or = 5'b01010, Multiply = 5'b00010, 
+		Divide = 5'b00001, Negate = 5'b10000, Not = 5'b10001;
 		
 	wire [31:0] resultRor, resultRol, resultAdd, multLO;
 	wire[63:32] multHI;
@@ -15,10 +15,11 @@ module ALU(
 	rol leftRotate(Ra,Rb,resultRol);
 	add_rca_32 Adding(resultAdd, Ra, Rb);
 	multiply_booth Multiplying(Ra,Rb,multHI,multLO);
-	
+	wire [4:0] ALU_control;
+	assign ALU_control = {add, subtract, multiply, divide};
 	always@(*)
 		begin
-			case(opcode)
+			case(ALU_control)
 				Addition : begin
 					ZLO = resultAdd;
 					ZHI = 32'h00000000;

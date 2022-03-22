@@ -3,16 +3,20 @@ module RAM (input clk, w, r,
 				input [31:0] data_in,
 				input [8:0] addr,
 				output [31:0] data_out);
+				
 	reg [31:0] ram [511:0];
+	
 	always @(posedge clk)
 	begin
 		if(w)
 		ram[addr] <= data_in;
 	end
+	
 	initial
 	begin
 		ram[0] = 32'h00800055;
 	end
+	
 	assign data_out = r?ram[addr]:32'bzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz;
 endmodule
 	

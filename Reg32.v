@@ -9,7 +9,7 @@ module reg32(
 	always @(posedge clk) 
 	begin
 		if (enable) 
-			Q = D;
+			Q <= D;
 		else if (clr) 
 			Q = 32'b0;
 	end	
