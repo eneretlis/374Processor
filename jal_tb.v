@@ -1,5 +1,5 @@
 `timescale 1ns/10ps
-module mfhi_tb;
+module jal_tb;
 	reg clk, clr, read, write;
 	reg PCout, Zlowout, Zhighout, MDRout, Cout, IN_Portout;
 	reg LOout, HIout, MARIn,PCIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn, InIn, OutIn, ZIn, CONIn, Gra, Grb, Grc;
@@ -61,11 +61,15 @@ module mfhi_tb;
 				T2 : begin
 					MDRout <=1; IRIn <= 1; 
 					PCIn <=1; IncPC <=1;
-					#30 MDRout <=0; IRIn <=0; PCIn <=0;
+					#30 MDRout <=0; IRIn <=0; PCIn <=0; IncPC <=0;
 				end
 				T3 : begin
-					Gra <=1; RIn<= 1; ZHighout <=1;
-					#30 Gra <=0; RIn <=0; Zhighout<=0;
+					PCout <=1; RIn<= 1;
+					#30 PCout <=0; RIn <=0;
+				end
+				T4 : begin
+					Gra <=1; Rout<= 1; PCIn <=1;
+					#30 Gra <=0; Rout <=0; PCIn <=0;
 				end
 			endcase
 		end
