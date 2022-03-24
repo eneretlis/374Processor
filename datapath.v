@@ -80,7 +80,8 @@ module datapath(
 			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, C_sign_exteneded, BusMuxOut);
 	
 	//call ALU
-	ALU the_ALU(add,subtract,multiply,divide,andSignal,orSignal,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
+	ALU the_ALU(add,subtract, multiplySignal, divideSignal, andSignal, orSignal, shrSignal, ShlSignal,
+					RorSignal, RolSignal, NegSignal, NotSignal,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
 	//MAR 
 	MARUnit the_MAR(clk, clr, MARIn, BusMuxOut, Address);
 	//RAM 
