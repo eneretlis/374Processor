@@ -119,18 +119,29 @@ module control_unit (
 					Zin <= 0;
 				end
 				fetch1: begin
+					PCout <= 0; MARin <=0; IncPC <=0;
 					Zlowout <=1; PCIn <=1; 
 					MDRIn <=1; read <= 1; 
 				end
 				fetch2: begin
+					Zlowout <=0; MDRIn <=0; read <=0; PCIn <=0;
+					MDRout <=1; IRIn <=1;
+					
 				end
 				add3: begin
+					MDRout <= 0; IRIn <=0;
+					
 					Grb <= 1; Rout <= 1;
-					Yin <= 0;
+					Yin <= 1;
 				end
 				add4: begin
+					//is it uneccessary to deassert then reassert Rout
+					Grb <=0; Rout <=0; Yin <=0;
+					Grc <= 1; Rout <=1; ZIn <=1;
 				end
 				add5: begin
+					Grc <=0; Rout <=0; ZIn<=0;
+					Gra <=1; RIn <=1; Zlowout <=1;
 				end
 				
 				sub3: begin
@@ -197,14 +208,24 @@ module control_unit (
 				end
 				
 				ld3: begin
+					MDRout <=0; IRIn<=0;
+					Grb <=1; BAout <=1; YIn <=1;
 				end
 				ld4: begin
+					Grb <=0; BAout <=0; YIn <=0;
+					ADD<=1; Cout <=1; ZIn<=1;
 				end
 				ld5: begin
+					ADD <=0; Cout <=0; ZIn <=0;
+					Zlowout <=1; MARIn <=1;
 				end
 				ld6: begin
+					Zlowout <=0; MARIn <=0;
+					read <=1; MDRIn<=1;
 				end
 				ld7: begin
+					read <=0; MDRIN <=0;
+					MDRout <=1; Gra <=1; RIn <=1;
 				end
 				
 				ldi3: begin
