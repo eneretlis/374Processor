@@ -64,7 +64,7 @@ module mfhi_tb;
 					#30 MDRout <=0; IRIn <=0; PCIn <=0;
 				end
 				T3 : begin
-					Gra <=1; RIn<= 1; ZHighout <=1;
+					Gra <=1; RIn<= 1; Zhighout <=1;
 					#30 Gra <=0; RIn <=0; Zhighout<=0;
 				end
 			endcase

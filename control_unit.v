@@ -1,6 +1,6 @@
 `timescale 1ns/10ps
 module control_unit (
-	output reg Gra, Grb, Grc, Rin, BAout, Rout, // here, you will define the inputs and outputs to your Control Unit
+	output reg Gra, Grb, Grc, RIn, BAout, Rout, // here, you will define the inputs and outputs to your Control Unit
 					MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn,
 					PCout, Zlowout, Zhighout, MDRout, Cout, In_Portout, LOout, HIout,
 					Read, Write, Clear,
@@ -12,7 +12,7 @@ module control_unit (
 				sub3 = 8'b0111, sub4 = 8'b01000, sub5 = 8'b01001,
 				mul3 = 8'b01010, mul4 = 8'b01011, mul5 = 8'b01100, mul6 = 8'b01101,
 				div3 = 8'b01110, div4 = 8'b01111, div5 = 8'b010000, div6 = 8'b010001,
-				shr3 = 8'b010010, shr4 = 8'b010011, shr5 = 8'010100,
+				shr3 = 8'b010010, shr4 = 8'b010011, shr5 = 8'b010100,
 				shl3 = 8'b010101, shl4 = 8'b010110, shl5 = 8'b010111,
 				ror3 = 8'b011000, ror4 = 8'b011001, ror5 = 8'b011010,
 				rol3 = 8'b011011, rol4 = 8'b011100, rol5 = 8'b011101,
@@ -28,14 +28,16 @@ module control_unit (
 				jr3 = 8'b0111101,
 				jal3 = 8'b0111110, jal4= 8'b0111111,
 				mfhi3 = 8'b01000000, mflo3 = 8'b01000001,
-				in3 = 8'b01000010, out3 = 8'b01000011
+				in3 = 8'b01000010, out3 = 8'b01000011,
 				and3 = 8'b01000100, and4 = 8'b01000101, and5 = 8'b01000110,
-				or3 = 8'b01000111, or4 = 8'b01001000, or5 = 8'b1001001;
+				or3 = 8'b01000111, or4 = 8'b01001000, or5 = 8'b1001001,
+				halt3 = 8'b1001010;
 	reg [3:0] Present_state = Reset_state; // adjust the bit pattern based on the number of states
 	always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
 		begin
-			if (Reset == 1’b1) Present_state = Reset_state;
-			else case (Present_state)
+			if (Reset == 1'b1) Present_state = Reset_state;
+			else begin
+			case (Present_state)
 				Reset_state : Present_state = fetch0;
 				fetch0 : Present_state = fetch1;
 				fetch1 : Present_state = fetch2;
@@ -49,6 +51,24 @@ module control_unit (
 									5'b01000 : Present_state = rol3;
 									5'b01001 : Present_state = and3;
 									5'b01010 : Present_state = or3;
+									5'b01011 : Present_state = addi3;
+									5'b01100 : Present_state = andi3;
+									5'b01101 : Present_state = ori3;
+									5'b01110 : Present_state = mul3;
+									5'b01111: Present_state = div3;
+									5'b10000 : Present_state = neg3;
+									5'b10001 : Present_state = not3;
+									5'b10010 : Present_state = br3;
+									5'b10011 : Present_state = jr3;
+									5'b10100 : Present_state = jal3;
+									5'b10101 : Present_state = in3;
+									5'b10110 : Present_state = out3;
+									5'b10111 : Present_state = mfhi3;
+									5'b11000 : Present_state = mflo3;
+									5'b11010 : Present_state = halt3;
+									5'b00000 : Present_state = ld3;
+									5'b00001 : Present_state = ldi3;
+									5'b00010 : Present_state = st3;
 								endcase
 							end
 				add3 : Present_state = add4;
@@ -97,34 +117,35 @@ module control_unit (
 				or3 : Present_state = or4;
 				or4 : Present_state = or5;
 			endcase
+			end
 		end
 	always @(Present_state) // do the job for each state
 		begin
 			case (Present_state) // assert the required signals in each state
 				Reset_state: begin
-					Gra <= 0; Grb <= 0; Grc <= 0; Yin <= 0;
-					Gra <=0;Grb <=0; Grc <=0; Rin <=0; BAout <=0; Rout <=0;//initialize the signals
+					Gra <= 0; Grb <= 0; Grc <= 0; YIn <= 0;
+					Gra <=0;Grb <=0; Grc <=0; RIn <=0; BAout <=0; Rout <=0;//initialize the signals
 					MARIn <=0; PCIn <=0; MDRIn <=0;IRIn <=0; YIn <=0; IncPC <=0; 
 					HiIn <=0; LoIn <=0; CIn <=0;InIn <=0; OutIn <=0; ZIn <=0; CONIn <=0;
 					PCout <=0; Zlowout <=0; Zhighout <=0; MDRout <=0; Cout <=0;
 					In_Portout <=0; LOout <=0; HIout <=0;
-					Read <=0; Write <=0; Clear,
+					Read <=0; Write <=0; Clear <=0;
 					ADD <=0; AND <=0; SUB <=0; DIV <=0; SHR <=0; SHL <=0; 
 					ROR <=0; ROL <=0; OR <=0; MUL <=0; NEG <=0; NOT <=0;
 				end
 				fetch0: begin
 					PCout <= 1; // see if you need to de-assert these signals
-					MARin <= 1;
+					MARIn <= 1;
 					IncPC <= 1;
-					Zin <= 0;
+					ZIn <= 0;
 				end
 				fetch1: begin
-					PCout <= 0; MARin <=0; IncPC <=0;
+					PCout <= 0; MARIn <=0; IncPC <=0;
 					Zlowout <=1; PCIn <=1; 
-					MDRIn <=1; read <= 1; 
+					MDRIn <=1; Read <= 1; 
 				end
 				fetch2: begin
-					Zlowout <=0; MDRIn <=0; read <=0; PCIn <=0;
+					Zlowout <=0; MDRIn <=0; Read <=0; PCIn <=0;
 					MDRout <=1; IRIn <=1;
 					
 				end
@@ -132,88 +153,133 @@ module control_unit (
 					MDRout <= 0; IRIn <=0;
 					
 					Grb <= 1; Rout <= 1;
-					Yin <= 1;
+					YIn <= 1;
 				end
 				add4: begin
 					//is it uneccessary to deassert then reassert Rout
-					Grb <=0; Rout <=0; Yin <=0;
-					Grc <= 1; Rout <=1; ZIn <=1;
+					Grb <=0; YIn <=0;
+					Grc <= 1;  ZIn <=1; ADD <=1;
 				end
 				add5: begin
-					Grc <=0; Rout <=0; ZIn<=0;
+					Grc <=0; Rout <=0; ZIn<=0; ADD<=0;
 					Gra <=1; RIn <=1; Zlowout <=1;
 				end
 				
 				sub3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				sub4: begin
+					Grb<=0; YIn<=0;
+					Grc<=1; ZIn<=1; SUB<=1;
 				end
 				sub5: begin
+					Grc<=0; ZIn<=0; SUB<=0; Rout <=0;
+					Gra <=1; RIn <=1; Zlowout <=1;
 				end
 				
 				mul3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; YIn<=1; Rout <=1;
 				end
 				mul4: begin
+					Grb<=0; YIn<=0;
+					Grc<=1; MUL<=1; ZIn<=1;
 				end
 				mul5: begin
+					Grc<=0; MUL<=0; ZIn<=0; Rout <=0;
+					Zlowout<=1; LoIn<=1;
 				end
 				mul6: begin
+					Zlowout<=1; LoIn<=0;
+					Zhighout<=1; HiIn<=1;
 				end
 				
 				div3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; YIn<=1; Rout <=1;
 				end
 				div4: begin
+					Grb<=0; YIn<=0;
+					Grc<=1; DIV<=1; ZIn<=1;
 				end
 				div5: begin
+					Grc<=0; DIV<=0; ZIn<=0; Rout <=0;
+					Zlowout<=1; LoIn<=1;
 				end
 				div6: begin
+					Zlowout<=1; LoIn<=0;
+					Zhighout<=1; HiIn<=1;
 				end
 				
 				shr3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1;  YIn<=1; Rout <=1;
 				end
 				shr4: begin
+					Grb<=0; YIn<=0; Rout<=0;
+					SHR<=1; ZIn<=1;
 				end
 				shr5: begin
+					SHR<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				shl3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1;  YIn<=1; Rout <=1;
 				end
 				shl4: begin
+					Grb<=0; YIn<=0; Rout<=0;
+					SHL<=1; ZIn<=1;
 				end
 				shl5: begin
+					SHL<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				ror3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				ror4: begin
+					Grb<=0; YIn<=0; Rout<=0;
+					ROR<=1; ZIn<=1;
 				end
 				ror5: begin
+					ROR<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				rol3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				rol4: begin
+					Grb<=0; YIn<=0; Rout<=0;
+					ROL<=1; ZIn<=1;
 				end
 				rol5: begin
+					ROL<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				neg3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; NEG<=1; ZIn<=1;
 				end
 				neg4: begin
+					Grb<=0; NEG<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1; 
 				end
 				
 				not3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; NEG<=1; ZIn<=1;
 				end
 				not4: begin
+					Grb<=0; NEG<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1; 
 				end
 				
 				ld3: begin
@@ -230,10 +296,10 @@ module control_unit (
 				end
 				ld6: begin
 					Zlowout <=0; MARIn <=0;
-					read <=1; MDRIn<=1;
+					Read <=1; MDRIn<=1;
 				end
 				ld7: begin
-					read <=0; MDRIN <=0;
+					Read <=0; MDRIn <=0;
 					MDRout <=1; Gra <=1; RIn <=1;
 				end
 				
@@ -268,7 +334,7 @@ module control_unit (
 				end
 				st7: begin
 					Gra<=0; Rout <=0; MDRIn<=0;
-					MDRout <=1; write <=1;
+					MDRout <=1; Write <=1;
 				end
 				
 				addi3: begin
@@ -294,7 +360,7 @@ module control_unit (
 				end
 				andi5: begin
 					AND <=0; Cout<=0; ZIn<=0;
-					Zlowout<=1; Gra<=1; RIn<=1
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				ori3: begin
@@ -347,7 +413,7 @@ module control_unit (
 				
 				mfhi3: begin
 					MDRout <=0; IRIn<=0;
-					Gra <=1; RIn<= 1; ZHighout <=1;
+					Gra <=1; RIn<= 1; Zhighout <=1;
 				end
 				
 				mflo3: begin
@@ -365,18 +431,28 @@ module control_unit (
 				
 				and3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; YIn<=1; Rout <=1;
 				end
 				and4: begin
+					Grb<=0; YIn<=0;
+					Gra<=1;AND<=1; ZIn<=1;
 				end
 				and5: begin
+					Gra<=0;AND<=0; ZIn<=0; Rout<=0;
+					Zlowout<=1; Grc<=1; RIn<=1;
 				end
 				
 				or3: begin
 					MDRout <=0; IRIn<=0;
+					Grb<=1; YIn<=1; Rout <=1;
 				end
 				or4: begin
+					Grb<=0; YIn<=0;
+					Gra<=1;OR<=1; ZIn<=1;
 				end
 				or5: begin
+					Gra<=0;OR<=0; ZIn<=0; Rout<=0;
+					Zlowout<=1; Grc<=1; RIn<=1;
 				end
 			endcase
 		end

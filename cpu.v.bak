@@ -1,0 +1,9 @@
+module CPU(
+	input [31:0] IR,
+	input Clock, Reset, Stop, Con_FF);
+	
+	Gra, Grb, Grc, RIn, BAout, Rout, 
+	MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn,
+	PCout, Zlowout, Zhighout, MDRout, Cout, In_Portout, LOout, HIout,
+	Read, Write, Clear,
+	ADD, AND, SUB, DIV, SHR, SHL, ROR, ROL, OR, MUL, NEG, NOT,

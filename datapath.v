@@ -10,7 +10,8 @@ module datapath(
 	input MARIn, PCIn, MDRIn, IRIn, YIn, IncPC, HiIn, LoIn, CIn,InIn, OutIn, ZIn, CONIn, 
 	//for select and encode logic
 	input Gra, Grb, Grc, Rin, Rout, BAout,
-	input add,subtract,multiply,divide, andSignal, orSignal);
+	input add,subtract,multiply,divide, andSignal, orSignal,shrSignal, ShlSignal,
+	input RorSignal, RolSignal, NegSignal, NotSignal);
 	//slect and encode for general purpose registeters
 	wire [15:0] RegIn, Regout;
 	//Bus contents
@@ -53,7 +54,7 @@ module datapath(
 	reg32 R14(clr,clk,RegIn[14],BusMuxOut,BusMuxInR14);
 	reg32 R15(clr,clk,RegIn[15],BusMuxOut,BusMuxInR15);
 	//special registers
-	reg32 PC(clr, clk, PCIn, BusMuxOut, PC_Data_Out);
+	pcReg32 PC(clk, IncPC, PCIn, BusMuxOut, PC_Data_Out);
 	//Maybe this Should be defined somehwere
 	reg32 IR(clr, clk, IRIn, BusMuxOut, IR_Data_Out);
 	reg32 Y(clr, clk, YIn, BusMuxOut, Y_Data_Out);

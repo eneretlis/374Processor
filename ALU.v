@@ -1,6 +1,6 @@
 module ALU(
-	input add, subtract, multiplySignal, divideSignal, andSignal, orSignal, shrSignal, ShlSignal,
-	input RorSignal, RolSignal, NegSignal, NotSignal, 
+	input add, subtract, multiplySignal, divideSignal, andSignal, orSignal, shrSignal, shlSignal,
+	input rorSignal, rolSignal, NegSignal, NotSignal, 
 	input [31:0] Ra, Rb,
 	output reg [31:0] ZHI, ZLO
 	);
@@ -17,7 +17,7 @@ module ALU(
 	add_rca_32 Adding(resultAdd, Ra, Rb);
 	multiply_booth Multiplying(Ra,Rb,multHI,multLO);
 	wire [11:0] ALU_control;
-	assign ALU_control = {NotSignal, NegSignal, divideSignal, multiplySignal, orSignal, andSignal
+	assign ALU_control = {NotSignal, NegSignal, divideSignal, multiplySignal, orSignal, andSignal,
 									rolSignal, rorSignal, shlSignal, shrSignal, subtract, add};
 	always@(*)
 		begin
