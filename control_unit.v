@@ -145,6 +145,7 @@ module control_unit (
 				end
 				
 				sub3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				sub4: begin
 				end
@@ -152,6 +153,7 @@ module control_unit (
 				end
 				
 				mul3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				mul4: begin
 				end
@@ -161,6 +163,7 @@ module control_unit (
 				end
 				
 				div3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				div4: begin
 				end
@@ -170,6 +173,7 @@ module control_unit (
 				end
 				
 				shr3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				shr4: begin
 				end
@@ -177,6 +181,7 @@ module control_unit (
 				end
 				
 				shl3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				shl4: begin
 				end
@@ -184,6 +189,7 @@ module control_unit (
 				end
 				
 				ror3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				ror4: begin
 				end
@@ -191,6 +197,7 @@ module control_unit (
 				end
 				
 				rol3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				rol4: begin
 				end
@@ -198,11 +205,13 @@ module control_unit (
 				end
 				
 				neg3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				neg4: begin
 				end
 				
 				not3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				not4: begin
 				end
@@ -229,76 +238,133 @@ module control_unit (
 				end
 				
 				ldi3: begin
+					MDRout <=0; IRIn<=0;
+					Grb <=1; BAout <= 1; YIn <=1;
 				end
 				ldi4: begin
+					Grb <=0; BAout <= 0; YIn <=0;
+					ADD <=1; Cout<=1; ZIn<=1;
 				end
 				ldi5: begin
+					ADD <=0; Cout<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				st3: begin
+					MDRout <=0; IRIn<=0;
+					Grb <=1; BAout <=1; YIn<=1;
 				end
 				st4: begin
+					Grb <=0; BAout <=0; YIn<=0;
+					ADD<=1; Cout<=1; ZIn<=1;
 				end
 				st5: begin
+					ADD<=0; Cout<=0; ZIn<=0;
+					Zlowout<=1; MARIn<=1;
 				end
 				st6: begin
+					Zlowout<=0; MARIn<=0;
+					Gra<=1; Rout <=1; MDRIn<=1;
 				end
 				st7: begin
+					Gra<=0; Rout <=0; MDRIn<=0;
+					MDRout <=1; write <=1;
 				end
 				
 				addi3: begin
+					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				addi4: begin
+					Grb<=0; Rout<=0; YIn<=0;
+					ADD<=1; Cout<=1; ZIn<=1;
 				end
 				addi5: begin
+					ADD<=0; Cout<=0; ZIn<=0;
+					Zlowout <=1; Gra<=1; RIn<=1;
 				end
 				
 				andi3: begin
+					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				andi4: begin
+					Grb<=0; Rout<=0; YIn<=0;
+					AND <=1; Cout<=1; ZIn<=1;
 				end
 				andi5: begin
+					AND <=0; Cout<=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1
 				end
 				
 				ori3: begin
+					MDRout <=0; IRIn<=0;
+					Grb<=1; Rout<=1; YIn<=1;
 				end
 				ori4: begin
+					Grb<=0; Rout<=0; YIn<=0;
+					OR<=1; Cout <=1; ZIn<=1;
 				end
 				ori5: begin
+					OR<=0; Cout <=0; ZIn<=0;
+					Zlowout<=1; Gra<=1; RIn<=1;
 				end
 				
 				br3: begin
+					MDRout <=0; IRIn<=0;
+					Gra<=1;  Rout <=1; CONIn <=1;
 				end
 				br4: begin
+					Gra<=0;  Rout <=0; CONIn <=0;
+					PCout <=1; YIn<=1;
 				end
 				br5: begin
+					PCout <=0; YIn<=0;
+					Cout <=1; ZIn<=1; ADD<=1;
 				end
 				br6: begin
+					Cout <=0; ZIn<=0; ADD<=0;
+					Zlowout <=1; PCIn<=1;
 				end
 				br7: begin
+					Zlowout <=0; PCIn<=0;
+					PCout<=1;
 				end
 				
 				jr3: begin
+					MDRout <=0; IRIn<=0;
+					Gra <=1; Rout <=1; PCIn<=1;
 				end
 				
 				jal3: begin
+					MDRout <=0; IRIn<=0;
+					PCout <=1; RIn<= 1;
 				end
 				jal4: begin
+					PCout <=0; RIn<= 0;
+					Gra <=1; Rout<= 1; PCIn <=1;
 				end
 				
 				mfhi3: begin
+					MDRout <=0; IRIn<=0;
+					Gra <=1; RIn<= 1; ZHighout <=1;
 				end
 				
 				mflo3: begin
+					MDRout <=0; IRIn<=0;
+					Gra <=1; RIn<= 1; Zlowout<=1;
 				end
 				
 				in3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				
 				out3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				
 				and3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				and4: begin
 				end
@@ -306,6 +372,7 @@ module control_unit (
 				end
 				
 				or3: begin
+					MDRout <=0; IRIn<=0;
 				end
 				or4: begin
 				end
