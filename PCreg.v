@@ -6,7 +6,11 @@ module pcReg32(
 	
 	always @(posedge clk)
 		begin	
-			if(IncPC ==1 && enable ==1) Q = Q+1;
-			else if(enable ==1) Q = D;
+			if(enable ==1 && IncPC == 0) Q = D;
+		end
+		
+	always @(posedge IncPC)
+		begin
+		Q = Q+1;
 		end
 	endmodule

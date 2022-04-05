@@ -7,7 +7,7 @@ module control_unit (
 					ADD, AND, SUB, DIV, SHR, SHL, ROR, ROL, OR, MUL, NEG, NOT,
 	input [31:0] IR,
 	input Clock, Reset, Stop, Con_FF);
-	parameter Reset_state = 8'b0000, fetch0 = 8'b0001, fetch1 = 8'b0010, fetch2 = 8'b0011,
+	parameter Reset_state = 8'b0000, fetch0 = 8'b0001, fetch1 = 8'b0010, fetch2a = 8'b0011,
 				add3 = 8'b0100, add4 = 8'b0101, add5 = 8'b0110,
 				sub3 = 8'b0111, sub4 = 8'b01000, sub5 = 8'b01001,
 				mul3 = 8'b01010, mul4 = 8'b01011, mul5 = 8'b01100, mul6 = 8'b01101,
@@ -31,91 +31,117 @@ module control_unit (
 				in3 = 8'b01000010, out3 = 8'b01000011,
 				and3 = 8'b01000100, and4 = 8'b01000101, and5 = 8'b01000110,
 				or3 = 8'b01000111, or4 = 8'b01001000, or5 = 8'b1001001,
-				halt3 = 8'b1001010;
-	reg [3:0] Present_state = Reset_state; // adjust the bit pattern based on the number of states
+				halt3 = 8'b1001010, fetch2b = 8'b1001011;
+	reg [8:0] Present_state = Reset_state; // adjust the bit pattern based on the number of states
 	always @(posedge Clock, posedge Reset) // finite state machine; if clock or reset rising-edge
 		begin
 			if (Reset == 1'b1) Present_state = Reset_state;
 			else begin
 			case (Present_state)
-				Reset_state : Present_state = fetch0;
-				fetch0 : Present_state = fetch1;
-				fetch1 : Present_state = fetch2;
-				fetch2 : begin
+				Reset_state : #40 Present_state = fetch0;
+				fetch0 : #40 Present_state = fetch1;
+				fetch1 : #40 Present_state = fetch2a;
+				fetch2a : #40 Present_state = fetch2b;
+				fetch2b : begin
 								case (IR[31:27]) // inst. decoding based on the opcode to set the next state
-									5'b00011 : Present_state = add3; // this is the add instruction
-									5'b00100 : Present_state = sub3;
-									5'b00101 : Present_state = shr3;
-									5'b00110 : Present_state = shl3;
-									5'b00111 : Present_state = ror3;
-									5'b01000 : Present_state = rol3;
-									5'b01001 : Present_state = and3;
-									5'b01010 : Present_state = or3;
-									5'b01011 : Present_state = addi3;
-									5'b01100 : Present_state = andi3;
-									5'b01101 : Present_state = ori3;
-									5'b01110 : Present_state = mul3;
-									5'b01111: Present_state = div3;
-									5'b10000 : Present_state = neg3;
-									5'b10001 : Present_state = not3;
-									5'b10010 : Present_state = br3;
-									5'b10011 : Present_state = jr3;
-									5'b10100 : Present_state = jal3;
-									5'b10101 : Present_state = in3;
-									5'b10110 : Present_state = out3;
-									5'b10111 : Present_state = mfhi3;
-									5'b11000 : Present_state = mflo3;
-									5'b11010 : Present_state = halt3;
-									5'b00000 : Present_state = ld3;
-									5'b00001 : Present_state = ldi3;
-									5'b00010 : Present_state = st3;
+									5'b00011 : #40 Present_state = add3; // this is the add instruction
+									5'b00100 : #40 Present_state = sub3;
+									5'b00101 : #40 Present_state = shr3;
+									5'b00110 : #40 Present_state = shl3;
+									5'b00111 : #40 Present_state = ror3;
+									5'b01000 : #40 Present_state = rol3;
+									5'b01001 : #40 Present_state = and3;
+									5'b01010 : #40 Present_state = or3;
+									5'b01011 : #40 Present_state = addi3;
+									5'b01100 : #40 Present_state = andi3;
+									5'b01101 : #40 Present_state = ori3;
+									5'b01110 : #40 Present_state = mul3;
+									5'b01111 : #40 Present_state = div3;
+									5'b10000 : #40 Present_state = neg3;
+									5'b10001 : #40 Present_state = not3;
+									5'b10010 : #40 Present_state = br3;
+									5'b10011 : #40 Present_state = jr3;
+									5'b10100 : #40 Present_state = jal3;
+									5'b10101 : #40 Present_state = in3;
+									5'b10110 : #40 Present_state = out3;
+									5'b10111 : #40 Present_state = mfhi3;
+									5'b11000 : #40 Present_state = mflo3;
+									5'b11010 : #40 Present_state = halt3;
+									5'b00000 : #40 Present_state = ld3;
+									5'b00001 : #40 Present_state = ldi3;
+									5'b00010 : #40 Present_state = st3;
 								endcase
 							end
-				add3 : Present_state = add4;
-				add4 : Present_state = add5;
-				sub3 : Present_state = sub4;
-				sub4 : Present_state = sub5;
-				mul3 : Present_state = mul4;
-				mul4 : Present_state = mul5;
-				mul5 : Present_state = mul6;
-				div3 : Present_state = div4;
-				div4 : Present_state = div5;
-				div5 : Present_state = div6;
-				shr3 : Present_state = shr4;
-				shr4 : Present_state = shr5;
-				shl3 : Present_state = shl4;
-				shl4 : Present_state = shl5;
-				ror3 : Present_state = ror4;
-				ror4 : Present_state = ror5;
-				rol3 : Present_state = rol4;
-				rol4 : Present_state = rol5;
-				not3 : Present_state = not4;
-				neg3 : Present_state = neg4;
-				ld3 : Present_state = ld4;
-				ld4 : Present_state = ld5;
-				ld5 : Present_state = ld6;
-				ld6 : Present_state = ld7;
-				ldi3 : Present_state = ldi4;
-				ldi4 : Present_state = ldi5;
-				st3 : Present_state = st4;
-				st4 : Present_state = st5;
-				st5 : Present_state = st6;
-				st6 : Present_state = st7;
-				addi3 : Present_state = addi4;
-				addi4 : Present_state = addi5;
-				andi3 : Present_state = andi4;
-				andi4 : Present_state = andi5;
-				ori3 : Present_state = ori4;
-				ori4 : Present_state = ori5;
-				br3 : Present_state = br4;
-				br4 : Present_state = br5;
-				br5 : Present_state = br6;
-				br6 : Present_state = br7;
-				jal3 : Present_state = jal4;
-				and3 : Present_state = and4;
-				and4 : Present_state = and5;
-				or3 : Present_state = or4;
-				or4 : Present_state = or5;
+				add3 : #40 Present_state = add4;
+				add4 : #40 Present_state = add5;
+				add5 : #40 Present_state = Reset_state;
+				sub3 : #40 Present_state = sub4;
+				sub4 : #40 Present_state = sub5;
+				sub5 : #40 Present_state = Reset_state;
+				mul3 : #40 Present_state = mul4;
+				mul4 : #40 Present_state = mul5;
+				mul5 : #40 Present_state = mul6;
+				mul6 : #40 Present_state = Reset_state;
+				div3 : #40 Present_state = div4;
+				div4 : #40 Present_state = div5;
+				div5 : #40 Present_state = div6;
+				div6 : #40 Present_state = Reset_state;
+				shr3 : #40 Present_state = shr4;
+				shr4 : #40 Present_state = shr5;
+				shr5 : #40 Present_state = Reset_state;
+				shl3 : #40 Present_state = shl4;
+				shl4 : #40 Present_state = shl5;
+				shl5 : #40 Present_state = Reset_state;
+				ror3 : #40 Present_state = ror4;
+				ror4 : #40 Present_state = ror5;
+				ror5 : #40 Present_state = Reset_state;
+				rol3 : #40 Present_state = rol4;
+				rol4 : #40 Present_state = rol5;
+				rol5 : #40 Present_state = Reset_state;
+				not3 : #40 Present_state = not4;
+				not4 : #40 Present_state = Reset_state;
+				neg3 : #40 Present_state = neg4;
+				neg4 : #40 Present_state = Reset_state;
+				ld3 : #40 Present_state = ld4;
+				ld4 : #40 Present_state = ld5;
+				ld5 : #40 Present_state = ld6;
+				ld6 : #40 Present_state = ld7;
+				ld7 : #40 Present_state = Reset_state;
+				ldi3 : #40 Present_state = ldi4;
+				ldi4 : #40 Present_state = ldi5;
+				ldi5 : #40 Present_state = Reset_state;
+				st3 : #40 Present_state = st4;
+				st4 : #40 Present_state = st5;
+				st5 : #40 Present_state = st6;
+				st6 : #40 Present_state = st7;
+				st7 : #40 Present_state = Reset_state;
+				addi3 : #40 Present_state = addi4;
+				addi4 : #40 Present_state = addi5;
+				addi5 : #40 Present_state = Reset_state;
+				andi3 : #40 Present_state = andi4;
+				andi4 : #40 Present_state = andi5;
+				andi5 : #40 Present_state = Reset_state;
+				ori3 : #40 Present_state = ori4;
+				ori4 : #40 Present_state = ori5;
+				ori5 : #40 Present_state = Reset_state;
+				br3 : #40 Present_state = br4;
+				br4 : #40 Present_state = br5;
+				br5 : #40 Present_state = br6;
+				br6 : #40 Present_state = br7;
+				br7 : #40 Present_state = Reset_state;
+				jal3 : #40 Present_state = jal4;
+				jal4 : #40 Present_state = Reset_state;
+				and3 : #40 Present_state = and4;
+				and4 : #40 Present_state = and5;
+				and5 : #40 Present_state = Reset_state;
+				or3 : #40 Present_state = or4;
+				or4 : #40 Present_state = or5;
+				or5 : #40 Present_state = Reset_state;
+				mfhi3 : #40 Present_state = Reset_state;
+				mflo3 : #40 Present_state = Reset_state;
+				halt3 : #40 Present_state = Reset_state;
+				in3 : #40 Present_state = Reset_state;
+				out3 : #40 Present_state = Reset_state;
 			endcase
 			end
 		end
@@ -134,18 +160,20 @@ module control_unit (
 					ROR <=0; ROL <=0; OR <=0; MUL <=0; NEG <=0; NOT <=0;
 				end
 				fetch0: begin
+					#20
 					PCout <= 1; // see if you need to de-assert these signals
 					MARIn <= 1;
-					IncPC <= 1;
 					ZIn <= 0;
 				end
 				fetch1: begin
-					PCout <= 0; MARIn <=0; IncPC <=0;
+					#20
+					PCout <= 0; MARIn <=0; IncPC <=1;
 					Zlowout <=1; PCIn <=1; 
 					MDRIn <=1; Read <= 1; 
 				end
-				fetch2: begin
-					Zlowout <=0; MDRIn <=0; Read <=0; PCIn <=0;
+				fetch2a: begin
+					#20
+					Zlowout <=0; Read <=0; MDRIn<=0; PCIn <=0; IncPC<=0;
 					MDRout <=1; IRIn <=1;
 					
 				end

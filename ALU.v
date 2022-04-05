@@ -9,12 +9,13 @@ module ALU(
 		RotateRight = 12'b0010000, RotateLeft = 12'b0100000, And = 12'b01000000, Or = 12'b010000000,
 		Multiply = 12'b000100000000, Divide = 12'b01000000000, Negate = 12'b010000000000, Not = 12'b100000000000;
 		
-	wire [31:0] resultRor, resultRol, resultAdd, multLO;
+	wire [31:0] resultRor, resultRol, multLO;
+	//wire [31:0] resultAdd;
 	wire[63:32] multHI;
 	
 	ror rightRotate(Ra,Rb,resultRor);
 	rol leftRotate(Ra,Rb,resultRol);
-	add_rca_32 Adding(resultAdd, Ra, Rb);
+	//add_rca_32 Adding(resultAdd, Ra, Rb);
 	multiply_booth Multiplying(Ra,Rb,multHI,multLO);
 	wire [11:0] ALU_control;
 	assign ALU_control = {NotSignal, NegSignal, divideSignal, multiplySignal, orSignal, andSignal,
@@ -23,7 +24,7 @@ module ALU(
 		begin
 			case(ALU_control)
 				Addition : begin
-					ZLO = resultAdd;
+					ZLO = Ra+Rb;
 					ZHI = 32'h00000000;
 				end
 				Subtraction : begin

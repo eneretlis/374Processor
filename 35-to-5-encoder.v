@@ -28,14 +28,7 @@ module encoder_32_to_5(
 		if(Data == 32'h00200000) Code = 21; else
 		if(Data == 32'h00400000) Code = 22; else
 		if(Data == 32'h00800000) Code = 23; else
-		if(Data == 32'h01000000) Code = 24; else
-		if(Data == 32'h02000000) Code = 25; else
-		if(Data == 32'h04000000) Code = 26; else
-		if(Data == 32'h08000000) Code = 27; else
-		if(Data == 32'h10000000) Code = 28; else
-		if(Data == 32'h20000000) Code = 29; else
-		if(Data == 32'h40000000) Code = 30; else
-		if(Data == 32'h80000000) Code = 31; else Code = 5'bx;
+		if(Data == 32'h01000000) Code = 24; else Code = 31;
 	
 	end
 endmodule

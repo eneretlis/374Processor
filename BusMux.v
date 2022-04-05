@@ -32,7 +32,7 @@ module bus_Mux(
 	21: BusMuxOut = MDR_Data_Out;
 	//22: BusMuxOut = In_Portout;
 	23: BusMuxOut = CValue;
-	default: BusMuxOut = 32'bx;
+	default:;
 	endcase
 	end
 endmodule

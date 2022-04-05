@@ -11,7 +11,8 @@ module datapath(
 	//for select and encode logic
 	input Gra, Grb, Grc, Rin, Rout, BAout,
 	input add,subtract,multiply,divide, andSignal, orSignal,shrSignal, ShlSignal,
-	input RorSignal, RolSignal, NegSignal, NotSignal);
+	input RorSignal, RolSignal, NegSignal, NotSignal,
+	output wire[31:0] IR_Data_Out);
 	//slect and encode for general purpose registeters
 	wire [15:0] RegIn, Regout;
 	//Bus contents
@@ -20,7 +21,7 @@ module datapath(
 	wire [4:0] bus_signal;
 	//define wires for the busMux, is the output of the data registers
 	wire [31:0] BusMuxInR0, BusMuxInR1, BusMuxInR2, BusMuxInR3, BusMuxInR4, BusMuxInR5, BusMuxInR6, BusMuxInR7, BusMuxInR8, BusMuxInR9,
-		 BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, PC_Data_Out, IR_Data_Out, 
+		 BusMuxInR10, BusMuxInR11, BusMuxInR12, BusMuxInR13, BusMuxInR14, BusMuxInR15, PC_Data_Out, 
 		 ZLo_Data_Out, Y_Data_Out, ZHi_Data_Out, Lo_Data_Out, Hi_Data_Out, MDR_data_out, CValue, Out_data_out, In_data_out;
 	//Z data in
 	wire [31:0] ZHiDataIn, ZLoDataIn;
@@ -81,7 +82,7 @@ module datapath(
 			 BusMuxInR15, Hi_Data_Out, Lo_Data_Out, ZHi_Data_Out, ZLo_Data_Out, PC_Data_Out, MDR_data_out, C_sign_exteneded, BusMuxOut);
 	
 	//call ALU
-	ALU the_ALU(add,subtract, multiplySignal, divideSignal, andSignal, orSignal, shrSignal, ShlSignal,
+	ALU the_ALU(add,subtract, multiply, divide, andSignal, orSignal, shrSignal, ShlSignal,
 					RorSignal, RolSignal, NegSignal, NotSignal,Y_Data_Out, BusMuxOut,ZHiDataIn, ZLoDataIn);
 	//MAR 
 	MARUnit the_MAR(clk, clr, MARIn, BusMuxOut, Address);
