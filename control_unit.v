@@ -160,21 +160,20 @@ module control_unit (
 					ROR <=0; ROL <=0; OR <=0; MUL <=0; NEG <=0; NOT <=0;
 				end
 				fetch0: begin
-					#20
 					PCout <= 1; // see if you need to de-assert these signals
 					MARIn <= 1;
 					ZIn <= 0;
 				end
 				fetch1: begin
-					#20
 					PCout <= 0; MARIn <=0; IncPC <=1;
 					Zlowout <=1; PCIn <=1; 
 					MDRIn <=1; Read <= 1; 
+					//#20 
+					//IncPC <=0;
 				end
 				fetch2a: begin
-					#20
-					Zlowout <=0; Read <=0; MDRIn<=0; PCIn <=0; IncPC<=0;
-					MDRout <=1; IRIn <=1;
+					Zlowout <=0; Read <=0; MDRIn<=0; PCIn <=0;
+					MDRout <=1; IRIn <=1; IncPC <=0;
 					
 				end
 				add3: begin
